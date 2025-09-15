@@ -31,3 +31,24 @@ Here is a survey paper the impact of the GCL and Edsger Dijkstra's work on nonde
 
 Here is a survey paper on the impact of Hoare logic on program verification:
 - [Krzysztof R. Apt and E.-R. Olderog. Fifty Years of Hoare’s Logic](https://arxiv.org/pdf/1904.03917)
+
+---
+
+Practical resources:
+
+- [Boogie](https://github.com/boogie-org/boogie) is an intermediate verification language, designed for building 
+  program verifiers. Many program verifiers (e.g., Dafny, Viper, etc.) compile their input programs to Boogie and use the 
+  Boogie toolchain to generate and discharge verification conditions. Boogie only supports sequential programs.
+- [Civl](https://civl-verifier.github.io/) is a program verifier for concurrent programs. It extends the Boogie toolchain to support
+  reasoning about concurrent programs using rely-guarantee reasoning.
+- [Dafny](https://dafny.org/) is a verification-aware programming language with built-in specification constructs 
+  (preconditions, postconditions, invariants) and an automatic program verifier.
+- [Why3](https://www.why3.org/) is a platform for deductive program verification. It provides WhyML, a programming language with
+  specification constructs, and an environment to generate verification conditions that can be discharged by various automated theorem provers.
+- [KeY](https://key-project.org/) is a formal verification tool for Java programs. It uses dynamic logic to reason about 
+  program correctness. KeY uses Java Modeling Language (JML) for writing specifications.
+- [OpenJML](https://www.openjml.org/) is a tool for checking Java programs annotated with JML specifications. 
+- [SPARK](https://learn.adacore.com/courses/intro-to-spark/chapters/01_Overview.html) is a programming language and toolset for high-assurance software development. 
+  It includes a subset of Ada with formal specification constructs and a static analyzer to verify program correctness.
+- [SPIN](https://spinroot.com/spin/whatispin.html) is a model checker for verifying the correctness of distributed software systems. 
+  It uses Promela, a modeling language similar to Dijkstra's GCL, to describe system behavior.
