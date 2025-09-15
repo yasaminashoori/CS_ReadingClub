@@ -52,3 +52,36 @@ Practical resources:
   It includes a subset of Ada with formal specification constructs and a static analyzer to verify program correctness.
 - [SPIN](https://spinroot.com/spin/whatispin.html) is a model checker for verifying the correctness of distributed software systems. 
   It uses Promela, a modeling language similar to Dijkstra's GCL, to describe system behavior.
+
+---
+
+Small practical projects:
+
+- Implement a simple program verifier for a While language using Hoare logic. The verifier should take a program and its specification (preconditions and postconditions)
+  as input, generate verification conditions, and use an SMT solver (e.g., Z3) to check if the conditions hold. In more
+  detail, the project can be broken down into the following steps:
+  1. Define the syntax and semantics of a simple While language (including variables, arithmetic expressions, boolean expressions, and control flow constructs like if-then-else and while loops).
+  2. Implement a parser to read programs and their specifications.
+  3. Implement the Hoare logic rules to generate verification conditions from the program and its specification.
+  4. Integrate an SMT solver (e.g., Z3) to check the generated verification conditions.
+  5. Test the verifier with various example programs and specifications.
+  6. (Optional) Extend the verifier to handle more complex features like arrays, functions, or concurrency.
+  7. Document the implementation and provide examples of usage.
+
+- Implement a simple interpreter for Dijkstra's Guarded Command Language (GCL). The interpreter should be able to execute GCL programs
+  and handle nondeterministic choices. The project can be broken down into the following steps:
+    1. Define the syntax and semantics of Dijkstra's GCL (including guarded commands like if-then-else, do-while loops, and nondeterministic choice).
+    2. Implement a parser to read GCL programs.
+    3. Implement the interpreter to execute GCL programs, handling nondeterministic choices appropriately.
+    4. Test the interpreter with various example GCL programs.
+    5. (Optional) Extend the interpreter to support additional features like variables, arithmetic expressions, and boolean expressions.
+    6. Document the implementation and provide examples of usage.
+
+- Implement a model checker for simple concurrent programs like a subset of Dijkstra's GCL. The model checker should be able to verify properties of concurrent programs
+  using techniques like state space exploration and temporal logic. The project can be broken down into the following steps:
+    1. Define the syntax and semantics of a simple concurrent programming language (including constructs for parallel composition, synchronization, and communication).
+    2. Implement a parser to read concurrent programs.
+    3. Implement the model checking algorithm to explore the state space of the program and verify properties expressed in temporal logic (e.g., LTL or CTL).
+    4. Test the model checker with various example concurrent programs and properties.
+    5. (Optional) Extend the model checker to support additional features like fairness constraints or more complex synchronization mechanisms.
+    6. Document the implementation and provide examples of usage.
