@@ -15,7 +15,7 @@ Chris Crary at CMU.
 ---
 
 ## 📂 Structure
-- `/week1`: All the resources related to the Hoare Logic and Guarded Command Language (GCL).
+- [`/week1`](week1/): Notes and resources for Week 1 (Hoare Logic, Dijkstra's GCL)
 ---
 
 
