@@ -7,6 +7,11 @@ Target papers:
 
 ---
 
+Slides:
+Here are some slides covering the target papers:
+
+- [Formal Correctness: An Introduction to Hoare Logic & GCL](./gcl_hoare.pdf) ([Source](./gcl_hoare.tex))
+---
 Textbooks:
 
 There are many classic textbooks on Hoare Logic and program verification. Here are a few recommendations which covers
