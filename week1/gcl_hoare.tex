@@ -1,0 +1,521 @@
+\documentclass[aspectratio=169]{beamer}
+
+\usepackage{fontspec}
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{appendixnumberbeamer}
+\usepackage{listings}
+\usetheme{metropolis}
+
+\title{Formal Correctness: An Introduction to Hoare Logic \& GCL}
+\subtitle{Proving and Deriving Provably Correct Programs}
+\date{September, 2025}
+\author{Amirreza Khakpour}
+
+% Custom commands for formatting
+\newcommand{\code}[1]{\lstinline|#1|}
+\newcommand{\hoare}[3]{\ensuremath{\{#1\}\ \code{#2}\ \{#3\}}}
+\newcommand{\wpcalc}[2]{\ensuremath{\text{wp}(\code{#1}, #2)}}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+    \tableofcontents
+\end{frame}
+
+\section{Introduction to Hoare Logic}
+
+\begin{frame}{Why Do We Need Formal Verification?}
+    \Large
+    How can we be \textit{certain} that a program works as intended?
+    \vspace{1cm}
+    \normalsize
+    \pause
+    \begin{itemize}
+        \item Testing can reveal the presence of bugs, but can it ever prove their absence?
+        \pause
+        \item For mission-critical systems in avionics, medicine, or finance, we need a mathematical guarantee of correctness.
+    \end{itemize}
+    \vfill
+    \pause
+    \begin{alertblock}{The Goal}
+        To establish a formal framework for reasoning about program correctness with the same rigor that mathematicians use to prove theorems.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{The Hoare Triple}
+    \frametitle{The Hoare Triple: Specifying Program Behavior}
+    The core concept of Hoare Logic is the Hoare Triple, a formal statement about a piece of code.
+    \vfill
+    \begin{center}
+        \Huge \hoare{P}{C}{Q}
+    \end{center}
+    \vfill
+    \begin{itemize}
+        \item[\textbf{P}] \textbf{Precondition}: A logical assertion that is true \textit{before} the command executes. \pause
+        \item[\textbf{C}] \textbf{Command}: The segment of code being analyzed. \pause
+        \item[\textbf{Q}] \textbf{Postcondition}: A logical assertion that is true \textit{after} the command terminates.
+    \end{itemize}
+    \vfill
+    \pause
+    \begin{block}{Interpretation: Partial Correctness}
+        "If precondition P holds and command C executes, then \textbf{upon termination}, postcondition Q will hold."
+    \end{block}
+\end{frame}
+
+\section{Hoare Logic: Core Rules}
+
+\begin{frame}{The Language of Commands}
+    \frametitle{A Simple Imperative Language}
+    Hoare Logic provides a set of rules for reasoning about the correctness of programs written in a simple, structured imperative language. The language consists of a few basic command types.
+    
+    \begin{columns}
+    \begin{column}{0.5\textwidth}
+        \begin{block}{Basic Commands}
+            \begin{itemize}
+                \item \code{skip}: Do nothing.
+                \item \code{x := E}: Assignment
+            \end{itemize}
+        \end{block}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+        \begin{block}{Control Structures}
+            \begin{itemize}
+                \item \code{C1; C2}: Sequence
+                \item \code{if B then C1 else C2}: Conditional
+                \item \code{while B do C}: Iteration
+            \end{itemize}
+        \end{block}
+    \end{column}
+    \end{columns}
+    
+    \vfill
+    \begin{alertblock}{The Strategy}
+        We will introduce a proof rule for each of these command structures, allowing us to reason about any program built from them.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Language Building Blocks}
+    \frametitle{Language Building Blocks}
+    The components of our simple language are defined as follows:
+    
+    \begin{itemize}
+        \item \textbf{Variables} $x, y, z, ...$ represent program variables (e.g., integers, booleans).
+        
+        \pause
+        \item \textbf{Expressions (E)} Arithmetic or logical expressions that evaluate to a value.
+        \begin{itemize}
+            \item Examples: \code{x + 1}, \code{y * 2}, \code{z - 5}
+        \end{itemize}
+        
+        \pause
+        \item\textbf{Boolean Cond. (B)} Expressions that evaluate to true or false. These are used as guards in conditionals and loops.
+        \begin{itemize}
+            \item Examples: \code{x > 0}, \code{y <= r}, \code{z = 10}
+        \end{itemize}
+        
+        \pause
+        \item \textbf{Commands (C)} A statement in the language, built from the constructs on the previous slide.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{The Assignment Rule}
+    \frametitle{The Simplest Rule: The Axiom of Assignment}
+    This is the foundational axiom for reasoning about state changes.
+    
+    \begin{alertblock}{Axiom of Assignment: \hoare{Q[x/E]}{x := E}{Q}}
+        To find the precondition, take the postcondition Q and substitute every free occurrence of `x` with the expression `E`. We work \textit{backwards}.
+    \end{alertblock}
+\end{frame}
+\begin{frame}{Assignment Example}
+    \begin{example}[Simple Example]
+        \textbf{Goal:} Prove \hoare{P}{x := 5}{x = 5}
+        \begin{itemize}
+            \item Substitute `x` with `5` in the postcondition `x = 5`.
+            \item $P \equiv (5 = 5) \equiv \textbf{True}$
+            \item \textbf{Result:} \hoare{True}{x := 5}{x = 5}
+        \end{itemize}
+    \end{example}
+    \pause
+    \begin{example}[More Involved Example]
+        \textbf{Goal:} Prove \hoare{x = k}{x := x + 1}{x = k + 1}
+        \begin{itemize}
+            \item The precondition is $(x = k + 1)[x/(x + 1)]$.
+            \item This simplifies to $(x + 1 = k + 1) \equiv (x = k)$.
+            \item \textbf{Result:} \hoare{x = k}{x := x + 1}{x = k + 1}
+        \end{itemize}
+    \end{example}
+    
+\end{frame}
+
+\begin{frame}{The Rule of Consequence: The Glue for Proofs}
+    \frametitle{The Rule of Consequence: Strengthening and Weakening}
+    Often, the precondition we have isn't syntactically identical to the one required by a rule. The Rule of Consequence allows us to bridge this logical gap.
+    
+    \begin{block}{Rule of Consequence}
+        \[ \frac{P \rightarrow P' \quad \hoare{P'}{C}{Q'} \quad Q' \rightarrow Q}{\hoare{P}{C}{Q}} \]
+        This rule allows us to:
+        \begin{enumerate}
+            \item \textbf{Strengthen the Precondition}: Use a precondition $P$ that is logically stronger than the one required ($P'$).
+            \item \textbf{Weaken the Postcondition}: Settle for a postcondition $Q$ that is logically weaker than the one we proved ($Q'$).
+        \end{enumerate}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Assignment: Full Proof Example}
+    \frametitle{Assignment: Full Proof Example using Consequence}
+    \textbf{Goal: Prove the triple \hoare{x = 5}{x := x * 2}{x > 8}}
+    \pause
+    \begin{block}{Proof Strategy}
+        1. First, use the Assignment Rule to find the \textit{weakest precondition} ($P'$) that guarantees the postcondition $\{x > 8\}$.
+        2. Then, use the Rule of Consequence to show that our \textit{given} precondition $\{x=5\}$ is strong enough to satisfy $P'$.
+    \end{block}
+    
+
+\end{frame}
+\begin{frame}{Step-by-step Proof}
+    \begin{enumerate}
+        \item \textbf{Find the weakest precondition ($P'$):}
+        \begin{itemize}
+            \item Command: \code{x := x * 2}, Postcondition $Q$: $\{x > 8\}$
+            \item Using the Assignment Rule, $P' \equiv Q[x/(x*2)] \equiv (x * 2 > 8)$.
+            \item Simplifying $P'$ gives us $\{x > 4\}$.
+            \item This establishes the validity of the triple: \hoare{x > 4}{x := x * 2}{x > 8}.
+        \end{itemize}
+        \item \textbf{Apply the Rule of Consequence:}
+        \begin{itemize}
+            \item Our \textit{given} precondition is $P \equiv \{x = 5\}$.
+            \item The \textit{required} weakest precondition is $P' \equiv \{x > 4\}$.
+            \item We must show that $P \rightarrow P'$. The statement $(x = 5) \rightarrow (x > 4)$ is true.
+        \end{itemize}
+        \item \textbf{Conclusion:} Since $(x = 5) \rightarrow (x > 4)$ and we have proven \hoare{x > 4}{x := x * 2}{x > 8}, by the Rule of Consequence, we have proven the original goal. $\blacksquare$
+    \end{enumerate}
+\end{frame}
+\begin{frame}{The Composition Rule}
+ \frametitle{Rules for Program Structure: Sequencing}
+    \begin{alertblock}{The Composition Rule}
+        \[ \frac{\hoare{P}{C_1}{R} \quad \hoare{R}{C_2}{Q}}{\hoare{P}{C_1; C_2}{Q}} \]
+        To prove a sequence of commands, find an intermediate assertion $R$ that connects them.
+    \end{alertblock}
+    \begin{example}
+     \textbf{Goal:} Prove \hoare{x=A \land y=B}{t := x; x := y; y := t}{x=B \land y=A}
+     \begin{itemize}
+         \item Working backward from the goal $\{x=B \land y=A\}$:
+         \item Before \code{y := t}, we need $\{x=B \land t=A\}$.
+         \item Before \code{x := y}, we need $\{y=B \land t=A\}$.
+         \item Before \code{t := x}, we need $\{y=B \land x=A\}$, which is logically equivalent to the given precondition.
+     \end{itemize}
+    \end{example}
+\end{frame}
+
+\begin{frame}{Composition: Full Proof Example}
+    \frametitle{Composition: Full Proof Example}
+    \textbf{Goal: Prove \hoare{x=k}{y := x+1; x := y*2}{x > 2k}}
+    \pause
+    \begin{block}{Proof Strategy}
+        1. Work backward from the final postcondition, using the Assignment Rule twice to find the weakest precondition for the entire sequence ($P'$).
+        2. Use the Rule of Consequence to show our given precondition $\{x=k\}$ is sufficient.
+    \end{block}
+    
+\end{frame}
+\begin{frame}{Step-by-step proof}
+\begin{enumerate}
+        \item \textbf{Analyze \code{x := y*2}:}
+        \begin{itemize}
+            \item The weakest precondition for this command to establish $\{x > 2k\}$ is the intermediate assertion $R \equiv (y*2 > 2k) \equiv \{y > k\}$.
+            \item This establishes: \hoare{y > k}{x := y*2}{x > 2k}.
+        \end{itemize}
+        \item \textbf{Analyze \code{y := x+1}:}
+        \begin{itemize}
+            \item The postcondition for this command must be $R \equiv \{y > k\}$.
+            \item The weakest precondition for the whole sequence ($P'$) is $R[y/(x+1)] \equiv ((x+1) > k) \equiv \{x > k-1\}$.
+        \end{itemize}
+        \item \textbf{Apply Rule of Consequence:}
+        \begin{itemize}
+            \item We have derived the valid triple: \hoare{x > k-1}{y := x+1; x := y*2}{x > 2k}.
+            \item Our \textit{given} precondition is $P \equiv \{x = k\}$.
+            \item We must show that $P \rightarrow P'$. The statement $(x=k) \rightarrow (x > k-1)$ is true.
+        \end{itemize}
+        \item \textbf{Conclusion:} The original goal is valid. $\blacksquare$
+    \end{enumerate}
+    
+\end{frame}
+\begin{frame}{The Conditional Rule}
+ \frametitle{Rules for Program Structure: Conditionals}
+    \begin{alertblock}{The Conditional Rule (If/Else)}
+        \[ \frac{\hoare{P \land B}{C_1}{Q} \quad \hoare{P \land \neg B}{C_2}{Q}}{\hoare{P}{\text{if } B \text{ then } C_1 \text{ else } C_2}{Q}} \]
+        You must prove that the postcondition $Q$ holds for both the 'then' and the 'else' branches, starting from the precondition $P$ and the fact that the branch was taken.
+    \end{alertblock}
+    \begin{example}
+     \textbf{Goal:} Prove \hoare{True}{if x < 0 then y := -x else y := x}{y = |x|}
+     \begin{itemize}
+         \item \textbf{Then path:} Prove \hoare{x < 0}{y:=-x}{y=|x|}. Weakest precondition is $(-x=|x|)$, which is true if $x < 0$. Valid.
+         \item \textbf{Else path:} Prove \hoare{x \ge 0}{y:=x}{y=|x|}. Weakest precondition is $(x=|x|)$, which is true if $x \ge 0$. Valid.
+         \item Both paths are valid, so the triple is correct.
+     \end{itemize}
+    \end{example}
+\end{frame}
+
+\begin{frame}{Conditional: Full Proof Example}
+    \frametitle{Conditional: Full Proof Example}
+    Let $Q \equiv (m=x \lor m=y) \land m \ge x \land m \ge y$.
+    
+    \textbf{Goal: Prove \hoare{True}{if x > y then m := x else m := y}{Q}}
+    
+    \begin{block}{Proof Strategy}
+        We use the conditional rule, which requires proving the correctness of the 'then' branch and the 'else' branch separately.
+    \end{block}
+    
+\end{frame}
+\begin{frame}{Step-by-step Proof}
+        \textbf{1. The "Then" Branch ($x > y$ is true)}
+        \begin{itemize}
+            \item \textbf{Goal:} Prove \hoare{x > y}{m := x}{Q}.
+            \item We find the weakest precondition for \code{m := x} to establish Q:
+            $Q[m/x] \equiv (x=x \lor x=y) \land x \ge x \land x \ge y$.
+            \item This simplifies to $True \land True \land x \ge y$, which is just $x \ge y$.
+            \item By the Rule of Consequence, since $(x>y) \rightarrow (x \ge y)$, this branch is valid.
+        \end{itemize}
+
+\end{frame}
+\begin{frame}{Step-by-step Proof-2}
+    
+        \textbf{2. The "Else" Branch ($x \le y$ is true)}
+        \begin{itemize}
+            \item \textbf{Goal:} Prove \hoare{x \le y}{m := y}{Q}.
+            \item We find the weakest precondition for \code{m := y} to establish Q:
+            $Q[m/y] \equiv (y=x \lor y=y) \land y \ge x \land y \ge y$.
+            \item This simplifies to $True \land y \ge x \land True$, which is just $y \ge x$.
+            \item By the Rule of Consequence, since $(x \le y) \rightarrow (y \ge x)$, this branch is valid.
+        \end{itemize}
+    \vfill
+    \textbf{Conclusion:} Since both branches guarantee the postcondition Q, the entire conditional statement is correct. $\blacksquare$
+\end{frame}
+\begin{frame}{The While Rule and Loop Invariants}
+    Reasoning about loops is the most complex part of Hoare Logic.
+    
+    \begin{alertblock}{The Rule of Iteration (While)}
+        \[ \frac{\hoare{I \land B}{C}{I}}{\hoare{I}{\text{while } B \text{ do } C}{I \land \neg B}} \]
+    \end{alertblock}
+    
+    The key is finding a \textbf{Loop Invariant} $I$. A property $I$ is a valid loop invariant if:
+    \begin{enumerate}
+        \item \textbf{Initialization}: $I$ is true before the loop begins.
+        \pause
+        \item \textbf{Maintenance}: If $I$ and the loop condition $B$ are true at the start of an iteration, $I$ remains true after the loop body $C$ executes.
+        \pause
+        \item \textbf{Termination}: When the loop ends (i.e., $\neg B$), the invariant $I$ helps prove the final postcondition.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{While Rule: Full Proof Example (Summation)}
+    \frametitle{While Rule: Full Proof Example (Summation)}
+    \textbf{Goal: Prove \hoare{n \ge 1}{s:=0; i:=1; while i $\le$ n do (s:=s+i; i:=i+1)}{s = $\frac{n(n+1)}{2}$}}
+    
+    
+    
+\end{frame}
+\begin{frame}{Step-by-step Proof}
+    \textbf{1. Analyze the Loop:} \code{while i <= n do ...}
+    \begin{itemize}
+        \item \textbf{Propose Invariant $I$}: $s$ is the sum of integers up to $i-1$, and $i$ hasn't gone too far.
+        $I \equiv (s = \frac{(i-1)i}{2} \land i \le n+1)$.
+        
+        \item \textbf{Maintenance:} We must prove \hoare{I \land i \le n}{s:=s+i; i:=i+1}{I}.
+        Working backward from $I$, the weakest precondition for the loop body is
+        $(s+i = \frac{((i+1)-1)(i+1)}{2} \land i+1 \le n+1) \equiv (s+i = \frac{i(i+1)}{2} \land i \le n)$.
+        The left part simplifies to $s = \frac{i(i+1)}{2} - i = \frac{i(i-1)}{2}$.
+        The required precondition is $(s = \frac{i(i-1)}{2} \land i \le n)$. This is exactly what $I \land i \le n$ simplifies to. The invariant is maintained.
+        
+        \item \textbf{Loop Conclusion:} By the While Rule, we have proven:
+        \hoare{I}{while loop}{I \land \neg(i \le n)}.
+        The postcondition $I \land i > n$, combined with $i \le n+1$ from $I$, implies $i = n+1$.
+        Substituting $i = n+1$ into $I$ gives $s = \frac{((n+1)-1)(n+1)}{2} = \frac{n(n+1)}{2}$.
+    \end{itemize}
+\end{frame}
+\begin{frame}{Step-by-step Proof-2}
+    \textbf{2. Analyze the Full Program:} \code{s:=0; i:=1; while\_loop}
+    \begin{itemize}
+        \item We work backwards from the loop's required precondition, which is $I$.
+        \item Weakest precondition before \code{i:=1} is $I[i/1] \equiv (s = \frac{(1-1)1}{2} \land 1 \le n+1) \equiv (s=0 \land n \ge 0)$.
+        \item Weakest precondition before \code{s:=0} is $(0=0 \land n \ge 0) \equiv (n \ge 0)$.
+    \end{itemize}
+    \textbf{3. Final Conclusion:} We have proven \hoare{n \ge 0}{full program}{s = $\frac{n(n+1)}{2}$}.
+    Since our given precondition $(n \ge 1) \rightarrow (n \ge 0)$, the original goal is proven by the Rule of Consequence. $\blacksquare$
+\end{frame}
+\section{Dijkstra's Guarded Commands}
+
+\begin{frame}{A New Idea: Nondeterminism}
+    Dijkstra introduced a language to make program derivation more systematic. A core idea was to embrace \textbf{nondeterminism}.
+    
+   % \begin{alertblock}{Why Nondeterminism?}
+    %    Instead of forcing the programmer to make arbitrary choices (e.g., `if-then-else` vs. `if-then-else if`), nondeterminism allows us to state the conditions under which actions can occur, without specifying the exact order. This simplifies proofs and can lead to more elegant, general algorithms.
+    %\end{alertblock}
+    
+    The basic building block is the \textbf{Guarded Command}:
+    
+    \begin{center}
+        \Large $\code{B -> S}$
+    \end{center}
+    
+    \begin{block}{Interpretation}
+        The statement list $\code{S}$ is eligible for execution \textit{only if} its guard $\code{B}$ is true.
+    \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{GCL Constructs: The Alternative}
+    \begin{alertblock}{Alternative Construct: $\code{if...fi}$}
+        $\code{if B1 -> S1 [] ... [] Bn -> Sn fi}$
+        \begin{itemize}
+            \item If one or more guards are true, one of the corresponding statements is chosen \textit{arbitrarily} and executed.
+            \item If no guards are true, the program aborts!
+        \end{itemize}
+    \end{alertblock}
+    \begin{example}[Max function]
+        \begin{verbatim}
+if x >= y -> m := x
+[] y >= x -> m := y
+fi
+        \end{verbatim}
+    \end{example}
+\end{frame}
+
+\begin{frame}[fragile]{GCL Constructs: The Repetitive}
+    \begin{alertblock}{Repetitive Construct: $\code{do...od}$}
+        $\code{do B1 -> S1 [] ... [] Bn -> Sn od}$
+        \begin{itemize}
+            \item As long as at least one guard is true, the machine nondeterministically picks one and executes its command.
+            \item The loop terminates only when all guards are false.
+        \end{itemize}
+    \end{alertblock}
+     \begin{example}[Euclidean Algorithm]
+        \begin{verbatim}
+do x > y -> x := x - y
+[] y > x -> y := y - x
+od
+        \end{verbatim}
+    \end{example}
+\end{frame}
+
+\begin{frame}{Dijkstra's Weakest Precondition Calculus}
+    Dijkstra provided a formal semantics for GCL using a \textit{predicate transformer}.
+    
+    \begin{center}
+        \Huge \wpcalc{S}{Q}
+    \end{center}
+    
+    \begin{description}
+        \item[\wpcalc{S}{Q}] The weakest precondition for command S to establish postcondition Q.
+    \end{description}
+    
+    \begin{block}{Interpretation: Total Correctness}
+        \wpcalc{S}{Q} is the set of \textit{all} initial states from which S is \textbf{guaranteed to terminate} in a state satisfying Q. This is stronger than Hoare's partial correctness.
+    \end{block}
+    
+    \begin{alertblock}{}
+        We can define `wp` for each program construct, allowing us to calculate the precondition for an entire program.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{WP Rule: Assignment}
+    The `wp` rule for assignment is identical to the Hoare axiom.
+
+    \begin{alertblock}{Rule for Assignment}
+        \[ \wpcalc{x := E}{Q} \equiv Q[x/E] \]
+    \end{alertblock}
+
+    \begin{example}
+        Calculate $\wpcalc{x := x + 5}{x > 20}$.
+        \begin{itemize}
+            \item We substitute $x$ with $x+5$ in the postcondition $x > 20$.
+            \item This yields $x + 5 > 20$.
+            \item The weakest precondition is $x > 15$.
+        \end{itemize}
+    \end{example}
+\end{frame}
+
+\begin{frame}{WP Rule: Composition}
+    For a sequence of commands, we calculate the `wp` backwards through the program.
+
+    \begin{alertblock}{Rule for Composition}
+        \[ \wpcalc{S1; S2}{Q} \equiv \wpcalc{S1}{\wpcalc{S2}{Q}} \]
+    \end{alertblock}
+
+    \begin{example}
+        Calculate $\wpcalc{y := x * 2; z := y - 3}{z > 10}$.
+        \begin{itemize}
+            \item First, calculate the `wp` for the second command:
+            \[ \wpcalc{z := y - 3}{z > 10} \equiv (y - 3 > 10) \equiv (y > 13) \]
+            \item Now, use this result as the postcondition for the first command:
+            \[ \wpcalc{y := x * 2}{y > 13} \equiv (x * 2 > 13) \equiv (x > 6.5) \]
+            \item The weakest precondition for the sequence is $x > 6.5$.
+        \end{itemize}
+    \end{example}
+\end{frame}
+
+\begin{frame}{WP Rule: Alternative (`if...fi`)}
+    The `wp` for an alternative construct has two conditions.
+
+    \begin{alertblock}{Rule for Alternative}
+        \[ \wpcalc{\text{if...fi}}{Q} \equiv (\lor B_i) \land (\land (B_i \implies \wpcalc{S_i}{Q})) \]
+    \end{alertblock}
+    
+    \begin{enumerate}
+        \item $\lor B_i$: At least one guard must be true (to prevent abortion).
+        \item $\land (B_i \implies \wpcalc{S_i}{Q})$: Every enabled path must lead to the desired postcondition.
+    \end{enumerate}
+    
+    
+\end{frame}
+\begin{frame}{Alternative Example}
+    \begin{example}
+        For $\code{if x > 0 -> y := 1 [] x <= 0 -> y := -1 fi}$ and postcondition $y^2 = 1$:
+        \begin{itemize}
+            \item Condition 1 (Guards): $(x>0) \lor (x \le 0) \equiv \textbf{True}$.
+            \item Condition 2 (Paths):
+            \begin{itemize}
+                \item $x > 0 \implies \wpcalc{y := 1}{y^2=1} \equiv (1^2=1) \equiv \textbf{True}$.
+                \item $x \le 0 \implies \wpcalc{y := -1}{y^2=1} \equiv ((-1)^2=1) \equiv \textbf{True}$.
+            \end{itemize}
+            \item The final `wp` is $\textbf{True} \land \textbf{True} \land \textbf{True} \equiv \textbf{True}$.
+        \end{itemize}
+    \end{example}
+\end{frame}
+
+\section{Comparison and Conclusion}
+
+\begin{frame}{Hoare Logic vs. Dijkstra's Calculus}
+    \begin{tabular}{p{0.25\textwidth} p{0.35\textwidth} p{0.35\textwidth}}
+        \toprule
+        \textbf{Concept} & \textbf{Hoare Logic} & \textbf{Dijkstra's WP Calculus} \\
+        \midrule
+        \textbf{Correctness} & \textbf{Partial Correctness} & \textbf{Total Correctness} \\
+        & (Assumes termination) & (Guarantees termination) \\
+        \addlinespace
+        \textbf{Nondeterminism} & Not naturally handled. & A central, simplifying feature. \\
+        \addlinespace
+        \textbf{Direction} & Verification (checking). & Derivation (synthesis). \\
+        \addlinespace
+        \textbf{Primary Use} & "Prove this program is correct." & "Derive a correct program." \\
+        \bottomrule
+    \end{tabular}
+\end{frame}
+
+\begin{frame}{Conclusion}
+    \begin{itemize}
+        \item \textbf{C.A.R. Hoare} gave us the first great logical system for program \textit{verification}. The \textbf{Hoare Triple} and the \textbf{Loop Invariant} are cornerstones of computer science.
+        \vspace{1cm}
+        \item \textbf{Edsger W. Dijkstra} gave us a system for program \textit{derivation}. \textbf{Nondeterminism} and the \textbf{Weakest Precondition} calculus allow us to construct correct programs from their specifications.
+        \vspace{1cm}
+        \item Both systems demonstrate that programming can be a rigorous, mathematical discipline. They form the bedrock of modern formal methods used in safety-critical systems today.
+    \end{itemize}
+\end{frame}
+
+\end{document}
+
