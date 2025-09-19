@@ -32,7 +32,7 @@ Join these Telegram channels and groups:
 Every week, we update the notes and resources in the folders:
 
 - [`/week1`](week1/): Notes and resources for Week 1 (Hoare Logic, Dijkstra's GCL)
-
+- [`/week2`](week2/): Notes and resources for Week 2 (Church-Rosser Theorem, Lambda Calculus)
 
 ## 🤝 How to Contribute
 
