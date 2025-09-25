@@ -19,3 +19,8 @@
 
 # Additional papers:
 - [A Set of Postulates for the Foundation of Logic(1932)](res/04.pdf) by Alonzo Church
+
+---
+
+# Slides
+- Here are some slides covering the target papers: [Church-Rosser Theorems](res/church_rosser.pdf) ([Source](res/church_rosser.tex))
