@@ -33,6 +33,7 @@ Every week, we update the notes and resources in the folders:
 
 - [`/week1`](week1/): Notes and resources for Week 1 (Hoare Logic, Dijkstra's GCL)
 - [`/week2`](week2/): Notes and resources for Week 2 (Church-Rosser Theorem, Lambda Calculus)
+- [`/week3`](week3/): Notes and resources for Week 3 (ISWIM)
 
 ## 🤝 How to Contribute
 
