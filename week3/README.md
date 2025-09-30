@@ -11,6 +11,8 @@
 ---
 # Videos
 - [Programming Language Pragmatics Talks by Jonathan Aldrich](https://youtube.com/playlist?list=PL3gnTA9lM_WcTwfau8A0bks8CvGuBH-5R&si=-dlqls67x84NiSt4)
+- [Functional Programming in Haskell by Graham Hutton](https://youtu.be/qThX0aoW9YI?feature=shared)
+- [Advanced Functional Programming in Haskell by Graham Hutton](https://youtu.be/V1FamhjNVcs?feature=shared)
 
 ---
 # Additional papers:
