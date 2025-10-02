@@ -10,6 +10,9 @@ Join these Telegram channels and groups:
 - Related Group for this club: [Classic Papers in programming languages by Amir Khaki](https://t.me/+mq883slDES9mZWNk)
 ---
 
+# Blog 
+You can see the papers and other stuff here: [Blog](https://csreadingclub.netlify.app/)
+
 ## 🎯 Goals
 1. **Read & discuss** the classic papers in the field.
 2. **Write notes** that reflect personal understanding (not copy-paste).  
