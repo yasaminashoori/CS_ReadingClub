@@ -7,6 +7,7 @@
 # Textbooks:
 - [Practical Foundations for Programming Languages, 2nd Edition](res/01.pdf) by Robert Harper
 - [Programming Language Pragmatics, 5th Edition, 2025](https://www.amazon.com/Programming-Language-Pragmatics-Michael-Scott/dp/0323999662?crid=2ALW192UAHZGV&dib=eyJ2IjoiMSJ9.Xg1khkITidn0E_rspetFeeAle3gn4y6oOrsg2Ycm01C2fE7K9zqMfIvV5LVTh76MhbYnv8tc2X0yeeX8MNgyg5XJx50uMgfWjyCbs7cuEGFE9ZTsIdA32Ac-LzjgnZUAWH8c3jy3RMPrTxR7D7OfuhuJh287bSM2LR1yPMNmVLDP0e09SZNPAYBSS2S55rsz29HpJ_DkWmZsXZJlUmhvtYVvDXA-T8ZR0L3HnxqNefM.zcBG1WKIeKrCUqX1ME58G0QiYtElZtIZBryY-9A2Mgg&dib_tag=se&keywords=programming+language+pragmatics&qid=1748295251&sprefix=programming+language+prag,aps,110&sr=8-1&linkCode=sl1&tag=jonathanald00-20&linkId=6e162a00fa39cca961f4478a92629331&language=en_US&ref_=as_li_ss_tl) by Michael L. Scott and Jonathan Aldrich
+- Also, you can see the 4th Edition of this book here: [Programming Language Pragmatics, 4th Edition, 2016](res/08.pdf)
 
 ---
 # Videos
