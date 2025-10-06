@@ -1,0 +1,317 @@
+\documentclass[10pt]{beamer}
+\usetheme{metropolis}
+\usepackage{amsmath, amssymb}
+\usepackage{mathpartir}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{tikz}
+
+
+\title{The Next 700 Programming Languages}
+\subtitle{Peter Landin's Vision for Language Families}
+\author{Amirreza Khakpour}
+\date{October, 2025}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}{Who Was Peter J. Landin?}
+\begin{figure}
+  \includegraphics[width=0.2\linewidth]{Peter_Landin.png}
+\end{figure}
+\begin{itemize}
+\item 1930 {-} 2009
+\item The mechanical evaluation of expressions // SECD machine
+\item Correspondence between ALGOL 60 and Church's Lambda-notation
+\item A Generalization of Jumps and Labels
+\item A formal description of Algol 60
+\item Mervyn Pragnell
+\item \url{https://vimeo.com/8955127}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The Next 700 \ldots}
+\begin{itemize}
+\item Isabelle: The next 700 theorem provers
+\item The next 700 BFT protocols
+\item The next 700 separation logics
+\item The next 700 CPU power models
+\item The next 700 impossibility results in time-varying graphs
+\item The next 700 ml-enabled compiler optimizations
+\item The next 700 compiler correctness theorems (functional pearl)
+\end{itemize}
+\end{frame}
+\begin{frame}{Motivation: The Language Explosion}
+\begin{quote}
+``... today ... 1,700 special programming languages used to 'communicate' in over 700 application areas.''
+\end{quote}
+\begin{itemize}
+\item Proliferation of specialized languages in 1960s
+\item Each claiming to be "problem-oriented"
+\item Landin: Many language characteristics irrelevant to actual problem orientation
+\item Need for unified framework rather than endless new languages
+\end{itemize}
+\end{frame}
+
+\begin{frame}{ISWIM: If you See What I Mean}
+\begin{itemize}
+\item Not a single language, but a \textbf{family} of languages
+\item Separates \textbf{expression mechanism} from \textbf{primitive operations}
+\item Problem-orientation determined by choice of primitives, not syntax
+\item Framework for describing things in terms of other things
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Key Design Principles}
+\begin{itemize}
+\item \textbf{Bias towards expressions} rather than statements
+\item \textbf{Nonprocedural subsystem} - purely functional subset
+\item Single print-instruction can handle complex outputs
+\item Maintains ease of construction/understanding like conventional expressions
+\item \textbf{Modern analog}: Functional programming (Haskell, ML) vs imperative
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The \texttt{where}-Notation}
+\begin{align*}
+& f(b+2c) + f(2b-c) \\
+& \textbf{where } f(x) = x(x+a) \\
+& \textbf{and } b = u/(u+1) \\
+& \textbf{and } c = v/(v+1)
+\end{align*}
+\begin{itemize}
+\item Mathematical notation brought to programming
+\item Definitions support expressions
+\item Can nest and combine freely
+\item \textbf{Modern analog}: \texttt{let} expressions in functional languages, \texttt{where} clauses in Haskell
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Adding \texttt{where} to a Language: Key Questions}
+\begin{itemize}
+\item \textbf{Linguistic Structure}: What can have where-clauses? (expressions, statements, definitions)
+\item \textbf{Syntax}: How to write unambiguously? (brackets, punctuation, indentation)
+\item \textbf{Semantic Constraints}: What can main clauses and definitions denote? (numbers, functions, arrays)
+\item \textbf{Outcome}: How do complex nests behave?
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Four Levels of Abstraction}
+\begin{enumerate}
+\item \textbf{Physical ISWIM}: Concrete syntax (reference, publication, hardware languages)
+\item \textbf{Logical ISWIM}: Sequence of textual elements, grouping rules
+\item \textbf{Abstract ISWIM}: Tree language - grammatical categories and nesting
+\item \textbf{Applicative Expressions}: Austere kernel - basis for all ISWIM
+\end{enumerate}
+\begin{itemize}
+\item \textbf{Modern analog}: AST vs concrete syntax in modern compilers
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Abstract ISWIM Structure}
+\begin{itemize}
+\item Texts are \textbf{amessage}s: either \textbf{demands} or \textbf{definitions}
+\item \textbf{aexpression}s can be:
+  \begin{itemize}
+  \item \textbf{Simple}: identifier
+  \item \textbf{Combination}: operator + operand
+  \item \textbf{Conditional}: two-armed or one-armed
+  \item \textbf{Listing}: list of expressions
+  \item \textbf{beet}: main clause + supporting definition
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Abstract ISWIM Definitions}
+\begin{itemize}
+\item \textbf{adefinition}s can be:
+  \begin{itemize}
+  \item \textbf{Standard}: definee = definiens
+  \item \textbf{Functionform}: lhs (abv-list) = rhs
+  \item \textbf{Programpoint}: deviant functions for premature termination
+  \item \textbf{Circular}: self-referential definitions
+  \item \textbf{Simultaneous}: multiple definitions
+  \item \textbf{beet}: main definition + supporting definition
+  \end{itemize}
+\item \textbf{Programpoints}: ISWIM's nearest thing to jumping
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Relationship to LISP: Five Improvements}
+\begin{enumerate}
+\item \textbf{No commitment to lists} - general purpose
+\item \textbf{Better storage allocation} - block structure via \texttt{where/let}
+\item \textbf{Less hardware-dependent} - abstract machine model
+\item \textbf{Better notation} - infix, indentation, less bracketing
+\item \textbf{Preserves LISP's logical virtues} - clean equivalence relations
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{The Offside Rule}
+\begin{itemize}
+\item \textbf{Layout-based syntax} using indentation
+\item Southeast quadrant of first symbol must contain entire phrase
+\item \textbf{Works equally well}: handwritten, typeset, typed
+\item \textbf{Optional}: Can mix with conventional punctuation
+\item \textbf{Systematic}: Applied consistently, admits alternatives
+\item \textbf{Modern analog}: Python's significant whitespace, Haskell layout rule
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Equivalence Rules: Group 1 - Substitution}
+\begin{mathpar}
+\inferrule{L = L'}{L(M) = L'(M)}
+
+\inferrule{M = M'}{L(M) = L(M')}
+
+\inferrule{M = M'}{(L \text{ where } x = M) = (L \text{ where } x = M')}
+\end{mathpar}
+\begin{itemize}
+\item Substituting equivalent subexpressions
+\item \textbf{Exceptions}: Main clause of where, RHS of function/circular definitions
+\item Ensures expressions depend only on values of subexpressions
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Equivalence Rules: Group 2 - Names \& Definitions}
+\begin{mathpar}
+\texttt{let } x = M; L = L \textbf{ where } x = M
+
+f(x) = L = f = (g \textbf{ where } g(x) = L)
+
+L \textbf{ where } x = M = \text{Subst } \frac{M}{x} L
+\end{mathpar}
+\begin{itemize}
+\item \textbf{Rule (β)}: Most important but limited to purely functional subset
+\item \textbf{Church-Rosser theorem}: Ensures elimination of \texttt{where} gives unique result
+\item \textbf{Modern analog}: β-reduction in lambda calculus
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Equivalence Rules: Group 3 - Built-in Entities}
+\begin{mathpar}
+\textbf{true} \rightarrow M; N = M
+
+\textbf{false} \rightarrow M; N = N
+
+\textbf{rec } x = L = x = (L \textbf{ where rec } x = L)
+\end{mathpar}
+\begin{itemize}
+\item Conditional expressions and recursive definitions
+\item List operations (head, tail, cons)
+\item Carefully formulated for unrestricted validity
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Equivalence Rules: Group 4 - Problem Orientation}
+\begin{itemize}
+\item Additional axioms for specific domains
+\item \textbf{Definitional extension}: Adding ISWIM definitions
+\item \textbf{Mutually constraining axioms}: e.g., integer equality
+\item Characterizes different family members
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Application and Denotation}
+\begin{itemize}
+\item Good expressions have:
+  \begin{enumerate}
+  \item Nesting subexpression structure
+  \item Each subexpression denotes something
+  \item Value depends only on subexpression values
+  \end{enumerate}
+\item ISWIM guarantees these for nonimperative subset
+\item \textbf{Application} as dyadic operation on abstract objects
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Terminology: Denotative vs Imperative}
+\begin{itemize}
+\item \textbf{Denotative}: Expressions denote values (like math)
+\item \textbf{Imperative}: Step-by-step commands to machine
+\item \textbf{Functional programming} {!=} functional notation
+\item About characterizing systems as entities + functional relations
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Eliminating Explicit Sequencing}
+\begin{itemize}
+\item Transformation steps from conventional to ISWIM:
+  \begin{enumerate}
+  \item Flowchart with algebraic steps
+  \item Replace independent assignments with multiple assignment
+  \item Local assignments → where-clauses
+  \item Procedures → type-procedures
+  \item Conditional jumps → bigger conditional arms
+  \item Common assignee branches → conditional RHS
+  \end{enumerate}
+\item Most recalcitrant: success/failure situations
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Key Innovations}
+\begin{itemize}
+\item \textbf{Programpoints}: Controlled non-local exits
+\item \textbf{Offside rule}: Layout-based syntax
+\item \textbf{Abstract machine}: Hardware-independent semantics
+\item \textbf{Equivalence rules}: Formal semantic foundation
+\item \textbf{Family approach}: Systematic language design space
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Legacy and Influence}
+\begin{itemize}
+\item Direct influence on functional languages (ML, Haskell)
+\item \texttt{let} expressions became standard in functional programming
+\item Layout rules inspired Python, Haskell, F#
+\item Abstract machine model influenced modern PL implementation
+\item Equivalence rules precursor to formal semantics
+\item Family approach anticipates modern language workbenches
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Discussion: Indentation Controversy}
+\begin{itemize}
+\item \textbf{Naur}: Printing rearrangements would break layout
+\item \textbf{Landin}: Experience shows it's workable
+\item \textbf{Floyd}: Page breaks disrupt multi-page indentation
+\item \textbf{Landin}: Limit carryover levels, use continuation symbols
+\item \textbf{Irons}: Practical experience shows it's profitable
+\item \textbf{Modern resolution}: Python proved layout syntax can work at scale
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Discussion: Declarative Languages}
+\begin{itemize}
+\item \textbf{Strachey}: DLs = languages without assignment/jumps
+\item Key property: substitution equivalence holds
+\item Enables program transformation and proof
+\item \textbf{Smith}: Declarative statements need imperatives to trigger computation
+\item \textbf{Strachey}: Distinction is explicit function definition vs implicit solving
+\item \textbf{Modern perspective}: Spectrum from imperative to declarative
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Conclusion}
+\begin{itemize}
+\item Don't design languages, design language families
+\item Three key techniques:
+  \begin{enumerate}
+  \item Abstract syntax
+  \item Axiomatization (equivalence rules)
+  \item Underlying abstract machine
+  \end{enumerate}
+\item Generalize alternatives to explicit sequencing
+\item ISWIM grafts procedural notions onto functional base
+\item Foundation for systematic language design
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\centering
+\Large Questions?
+\end{frame}
+\end{document}

@@ -26,3 +26,8 @@
 - [PAL—a language designed for teaching programming linguistics, 1968](res/07.pdf) by Arthur Evans, Jr.
 - [The Essence of Functional Programming, 1985](https://jgbm.github.io/eecs762f19/papers/wadler-monads.pdf) by Philip Wadler
 - [The Next 7000 Programming Languages, 2019](res/02.pdf) by Robert Chatley, Alastair Donaldson, and Alan Mycroft
+
+---
+
+# Slides
+- Here are some slides covering the target papers: [The Next 700 Programming Languages](res/ISWIM.pdf) ([Source](res/ISWIM.tex))
